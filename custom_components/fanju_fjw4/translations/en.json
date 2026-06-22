@@ -3,10 +3,33 @@
     "step": {
       "user": {
         "title": "FanJu FJW4 Weather Station",
+        "description": "Choose how Home Assistant should read the station.",
+        "menu_options": {
+          "cloud": "Cloud (WeatherSense account)",
+          "local": "Local (UDP push, no account)"
+        }
+      },
+      "cloud": {
+        "title": "FanJu FJW4 – Cloud",
         "description": "Enter the credentials you use to sign in to the WeatherSense app.",
         "data": {
           "username": "Email",
           "password": "Password"
+        }
+      },
+      "local": {
+        "title": "FanJu FJW4 – Local",
+        "description": "Home Assistant listens for the station's UDP uploads. Discovered station: {discovered}. If enabled, setup sends the Hi-Flying UDP AT command that points the station at Home Assistant. Some modules may lose this setting after a power cycle, so Home Assistant checks it regularly and restores it when needed.",
+        "data": {
+          "listen_port": "Listen port (UDP)",
+          "forward_to_cloud": "Hybrid: also forward to the vendor cloud",
+          "configure_station": "Automatically configure the station",
+          "station_host": "Station IP address",
+          "target_host": "Home Assistant IP address for station uploads"
+        },
+        "data_description": {
+          "station_host": "Leave empty only if you will configure the station manually.",
+          "target_host": "Leave empty to use the local IP Home Assistant uses to reach the station."
         }
       },
       "reauth_confirm": {
@@ -21,6 +44,8 @@
     "error": {
       "cannot_connect": "Failed to connect to the WeatherSense cloud.",
       "invalid_auth": "Invalid email or password.",
+      "station_not_found": "No station was found. Enter the station IP address or disable automatic configuration.",
+      "cannot_configure_station": "Failed to configure the station through the Hi-Flying UDP AT interface.",
       "unknown": "Unexpected error."
     },
     "abort": {
@@ -34,10 +59,15 @@
       "init": {
         "title": "FanJu FJW4 options",
         "data": {
-          "scan_interval": "Polling interval (seconds)"
+          "scan_interval": "Polling interval (seconds)",
+          "forward_to_cloud": "Hybrid: also forward to the vendor cloud",
+          "configure_station": "Automatically keep station pointed at Home Assistant",
+          "station_host": "Station IP address",
+          "target_host": "Home Assistant IP address for station uploads"
         },
         "data_description": {
-          "scan_interval": "How often to poll the cloud for new readings. Minimum 60 seconds."
+          "scan_interval": "How often to poll the cloud for new readings. Minimum 60 seconds.",
+          "target_host": "Leave empty to infer the local IP from the station route."
         }
       }
     }

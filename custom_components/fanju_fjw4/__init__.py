@@ -5,6 +5,7 @@ from __future__ import annotations
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 
+from .const import MODE_LOCAL
 from .coordinator import FanjuConfigEntry, FanjuDataUpdateCoordinator
 
 PLATFORMS: list[Platform] = [Platform.SENSOR]
@@ -13,7 +14,11 @@ PLATFORMS: list[Platform] = [Platform.SENSOR]
 async def async_setup_entry(hass: HomeAssistant, entry: FanjuConfigEntry) -> bool:
     """Set up FanJu FJW4 from a config entry."""
     coordinator = FanjuDataUpdateCoordinator(hass, entry)
-    await coordinator.async_config_entry_first_refresh()
+    if coordinator.mode == MODE_LOCAL:
+        await coordinator.async_start_local()
+        entry.async_on_unload(coordinator.async_stop_local)
+    else:
+        await coordinator.async_config_entry_first_refresh()
 
     entry.runtime_data = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

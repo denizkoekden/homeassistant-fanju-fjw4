@@ -161,4 +161,7 @@ class FanjuSensor(CoordinatorEntity[FanjuDataUpdateCoordinator], SensorEntity):
     @property
     def native_value(self) -> float | None:
         """Return the current value for this sensor."""
+        if self.coordinator.data is None:
+            # Local push mode: no upload received yet.
+            return None
         return self.entity_description.value_fn(self.coordinator.data)
