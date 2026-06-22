@@ -15,13 +15,7 @@ assignees: ""
 **Logs:**
 
 ```
-Show the Homebridge logs here, remove any sensitive information.
-```
-
-**Plugin Config:**
-
-```json
-Show your Homebridge config.json here, remove any sensitive information.
+Show the Home Assistant logs here (enable debug logging for custom_components.fanju_fjw4), remove any sensitive information.
 ```
 
 **Screenshots:**
@@ -30,10 +24,8 @@ Show your Homebridge config.json here, remove any sensitive information.
 
 **Environment:**
 
-- **Plugin Version**:
-- **Homebridge Version**: <!-- homebridge -V -->
-- **Node.js Version**: <!-- node -v -->
-- **NPM Version**: <!-- npm -v -->
-- **Operating System**: <!-- Raspbian / Ubuntu / Debian / Windows / macOS / Docker / hb-service -->
+- **Integration Version**:
+- **Home Assistant Version**:
+- **Installation Type**: <!-- Home Assistant OS / Supervised / Container / Core -->
 
 <!-- Click the "Preview" tab before you submit to ensure the formatting is correct. -->

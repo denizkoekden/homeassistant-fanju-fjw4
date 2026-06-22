@@ -1,0 +1,5 @@
+{
+  "name": "FanJu FJW4 Weather Station",
+  "render_readme": true,
+  "homeassistant": "2024.12.0"
+}

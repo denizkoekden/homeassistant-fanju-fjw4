@@ -1,0 +1,12 @@
+{
+  "domain": "fanju_fjw4",
+  "name": "FanJu FJW4 Weather Station",
+  "codeowners": ["@denizkoekden"],
+  "config_flow": true,
+  "documentation": "https://github.com/denizkoekden/homeassistant-fanju-fjw4",
+  "integration_type": "device",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/denizkoekden/homeassistant-fanju-fjw4/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}

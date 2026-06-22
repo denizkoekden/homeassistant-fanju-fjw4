@@ -1,0 +1,54 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "FanJu FJW4 Wetterstation",
+        "description": "Gib die Zugangsdaten ein, mit denen du dich in der WeatherSense-App anmeldest.",
+        "data": {
+          "username": "E-Mail",
+          "password": "Passwort"
+        }
+      },
+      "reauth_confirm": {
+        "title": "FanJu FJW4 erneut anmelden",
+        "description": "Die WeatherSense-Zugangsdaten für {username} sind nicht mehr gültig. Bitte erneut eingeben.",
+        "data": {
+          "username": "E-Mail",
+          "password": "Passwort"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zur WeatherSense-Cloud fehlgeschlagen.",
+      "invalid_auth": "Ungültige E-Mail oder ungültiges Passwort.",
+      "unknown": "Unerwarteter Fehler."
+    },
+    "abort": {
+      "already_configured": "Diese Wetterstation ist bereits eingerichtet.",
+      "reauth_successful": "Die erneute Anmeldung war erfolgreich.",
+      "wrong_account": "Die Zugangsdaten gehören zu einer anderen Wetterstation."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "FanJu FJW4 Optionen",
+        "data": {
+          "scan_interval": "Abrufintervall (Sekunden)"
+        },
+        "data_description": {
+          "scan_interval": "Wie oft die Cloud nach neuen Messwerten abgefragt wird. Minimum 60 Sekunden."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "indoor_temperature": { "name": "Innentemperatur" },
+      "indoor_humidity": { "name": "Luftfeuchtigkeit innen" },
+      "outdoor_temperature": { "name": "Außentemperatur" },
+      "outdoor_humidity": { "name": "Luftfeuchtigkeit außen" },
+      "pressure": { "name": "Luftdruck" }
+    }
+  }
+}
