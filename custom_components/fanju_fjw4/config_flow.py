@@ -73,7 +73,10 @@ async def _validate_credentials(
         WeatherSenseAuthError: If the credentials are rejected.
         WeatherSenseError: On connection or unexpected response errors.
     """
-    api = WeatherSenseApi(async_get_clientsession(hass), username, password)
+    # verify_ssl=False: the vendor cloud serves an expired certificate.
+    api = WeatherSenseApi(
+        async_get_clientsession(hass, verify_ssl=False), username, password
+    )
     await api.login()
     return await api.get_bound_device()
 

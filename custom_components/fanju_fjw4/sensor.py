@@ -30,12 +30,26 @@ from .const import (
 from .coordinator import FanjuConfigEntry, FanjuDataUpdateCoordinator
 
 
-def _reading(data: dict[str, Any], sensor_type: int, channel: int) -> float | None:
-    """Return ``curVal`` for the matching sensor type/channel, if present."""
+# The cloud reports these "no reading" sentinels for a channel when the
+# matching sensor is absent or temporarily out of range (e.g. lost link):
+# 0xFFFF (65535) for 16-bit temperature, 0xFF (255) for 8-bit humidity.
+_INVALID_TEMPERATURE = 65535
+_INVALID_HUMIDITY = 255
+
+
+def _reading(
+    data: dict[str, Any],
+    sensor_type: int,
+    channel: int,
+    invalid: tuple[float, ...] = (),
+) -> float | None:
+    """Return ``curVal`` for the matching sensor type/channel, if valid."""
     for sensor in data.get("sensorDatas") or []:
         if sensor.get("type") == sensor_type and sensor.get("channel") == channel:
             value = sensor.get("curVal")
-            return float(value) if value is not None else None
+            if value is None or value in invalid:
+                return None
+            return float(value)
     return None
 
 
@@ -56,7 +70,7 @@ SENSOR_DESCRIPTIONS: tuple[FanjuSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: _reading(
-            data, SENSOR_TYPE_TEMPERATURE, CHANNEL_INDOOR
+            data, SENSOR_TYPE_TEMPERATURE, CHANNEL_INDOOR, (_INVALID_TEMPERATURE,)
         ),
     ),
     FanjuSensorEntityDescription(
@@ -65,7 +79,9 @@ SENSOR_DESCRIPTIONS: tuple[FanjuSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.HUMIDITY,
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda data: _reading(data, SENSOR_TYPE_HUMIDITY, CHANNEL_INDOOR),
+        value_fn=lambda data: _reading(
+            data, SENSOR_TYPE_HUMIDITY, CHANNEL_INDOOR, (_INVALID_HUMIDITY,)
+        ),
     ),
     FanjuSensorEntityDescription(
         key="outdoor_temperature",
@@ -74,7 +90,7 @@ SENSOR_DESCRIPTIONS: tuple[FanjuSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: _reading(
-            data, SENSOR_TYPE_TEMPERATURE, CHANNEL_OUTDOOR
+            data, SENSOR_TYPE_TEMPERATURE, CHANNEL_OUTDOOR, (_INVALID_TEMPERATURE,)
         ),
     ),
     FanjuSensorEntityDescription(
@@ -83,7 +99,9 @@ SENSOR_DESCRIPTIONS: tuple[FanjuSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.HUMIDITY,
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda data: _reading(data, SENSOR_TYPE_HUMIDITY, CHANNEL_OUTDOOR),
+        value_fn=lambda data: _reading(
+            data, SENSOR_TYPE_HUMIDITY, CHANNEL_OUTDOOR, (_INVALID_HUMIDITY,)
+        ),
     ),
     FanjuSensorEntityDescription(
         key="pressure",
