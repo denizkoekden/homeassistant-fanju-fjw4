@@ -19,7 +19,7 @@
       },
       "local": {
         "title": "FanJu FJW4 – Lokal",
-        "description": "Home Assistant lauscht auf die UDP-Uploads der Station. Gefundene Station: {discovered}. Wenn aktiviert, sendet die Einrichtung den Hi-Flying-UDP-AT-Befehl, der die Station auf Home Assistant umstellt. Manche Module verlieren diese Einstellung nach einem Power-Cycle; Home Assistant prüft sie deshalb regelmäßig und stellt sie bei Bedarf wieder her.",
+        "description": "Home Assistant lauscht auf die UDP-Uploads der Station. Gefundene Station: {discovered}. Wenn aktiviert, sendet die Einrichtung den Hi-Flying-UDP-AT-Befehl, der die Station auf Home Assistant umstellt. Manche Module verlieren diese Einstellung nach einem Power-Cycle; Home Assistant prüft sie deshalb regelmäßig und stellt sie bei Bedarf wieder her. Der erste Wert kann etwas dauern — gib ihm nach der Einrichtung bis zu 15–30 Minuten; danach meldet die Station etwa einmal pro Minute.",
         "data": {
           "listen_port": "Lausch-Port (UDP)",
           "forward_to_cloud": "Hybrid: zusätzlich an die Hersteller-Cloud weiterleiten",

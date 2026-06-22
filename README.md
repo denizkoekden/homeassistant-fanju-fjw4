@@ -43,6 +43,13 @@ repoints the module at Home Assistant for you. Some of these modules forget that
 after a power cut, so it re-checks every few minutes and sets it again if the
 station has drifted back to the cloud.
 
+Be patient after the first setup: it can take a while for the first reading to
+show up — usually a few minutes, but give it **15–30 minutes** before worrying.
+The module sometimes keeps sending to its previous target until it next cycles,
+and the integration only re-checks every five minutes. Once data is flowing the
+station reports about once a minute. That interval is fixed by the station's main
+board, not the Wi-Fi module, so there's no setting to make it report faster.
+
 Temperature, humidity and pressure are all read straight out of the packets. The
 pressure encoding is a little odd — the firmware stores it inverted — but it
 lines up with the cloud, so you get the full set of readings without an account.

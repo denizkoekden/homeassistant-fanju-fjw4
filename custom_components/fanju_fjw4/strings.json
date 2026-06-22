@@ -19,7 +19,7 @@
       },
       "local": {
         "title": "FanJu FJW4 – Local",
-        "description": "Home Assistant listens for the station's UDP uploads. Discovered station: {discovered}. If enabled, setup sends the Hi-Flying UDP AT command that points the station at Home Assistant. Some modules may lose this setting after a power cycle, so Home Assistant checks it regularly and restores it when needed.",
+        "description": "Home Assistant listens for the station's UDP uploads. Discovered station: {discovered}. If enabled, setup sends the Hi-Flying UDP AT command that points the station at Home Assistant. Some modules may lose this setting after a power cycle, so Home Assistant checks it regularly and restores it when needed. The first reading can take a while — give it up to 15–30 minutes after setup before worrying; afterwards the station reports about once a minute.",
         "data": {
           "listen_port": "Listen port (UDP)",
           "forward_to_cloud": "Hybrid: also forward to the vendor cloud",
