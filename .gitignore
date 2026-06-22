@@ -25,3 +25,6 @@ htmlcov/
 # Environment files
 .env
 .env.test
+
+# Local brand-asset preview (not part of the integration)
+brand-preview/
