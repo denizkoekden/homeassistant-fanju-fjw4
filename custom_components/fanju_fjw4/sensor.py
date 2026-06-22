@@ -109,6 +109,8 @@ SENSOR_DESCRIPTIONS: tuple[FanjuSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ATMOSPHERIC_PRESSURE,
         native_unit_of_measurement=UnitOfPressure.HPA,
         state_class=SensorStateClass.MEASUREMENT,
+        # Device reports whole hPa; avoid a misleading "1020.00 hPa".
+        suggested_display_precision=0,
         value_fn=lambda data: (
             float(data["atmos"]) if data.get("atmos") is not None else None
         ),
