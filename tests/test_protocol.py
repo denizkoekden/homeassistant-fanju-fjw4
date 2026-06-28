@@ -41,22 +41,8 @@ _REAL_UPLOAD = bytes.fromhex(
     "bc0642be0644a7063e"  # indoor cur/high/low: (temp16_LE, hum8)
     "3b07233b0743720622"  # outdoor cur/high/low
     "ffffffffffffffffffffffffffffffffffff"  # absent channels
-    "02fcffffff"  # pressure 0xFC02 (= 1020 hPa) + status
+    "02fcffffff"  # trailing bytes (not pressure - the station doesn't send it)
     "2f20cc3e"  # checksum + footer
-)
-
-# A second real upload captured later the same day, when the cloud reported
-# 1022 hPa. Used together with _REAL_UPLOAD to pin the pressure encoding
-# (0xFC02 -> 1020, 0xFC00 -> 1022; hPa = 0xFFFE - little-endian value).
-_REAL_UPLOAD_1022 = bytes.fromhex(
-    "aa3c570134eae78004ce"
-    "533001003200"
-    "010d1a061616392a00"  # ...22:57:42, lead 00
-    "bf0648c90648a7063e"  # indoor cur/high/low
-    "d8062f25072fd80624"  # outdoor cur/high/low
-    "ffffffffffffffffffffffffffffffffffff"
-    "00fcffffff"  # pressure 0xFC00 (= 1022 hPa)
-    "6821cc3e"
 )
 
 
@@ -78,17 +64,6 @@ def test_parse_real_upload():
     assert _by(out, 2, 0) == 66
     assert _by(out, 1, 1) == 95.1
     assert _by(out, 2, 1) == 35
-    assert out["atmos"] == 1020
-
-
-def test_parse_pressure_second_reading():
-    out = parse_upload(_REAL_UPLOAD_1022)
-    assert out["timestamp"] == "2026-06-22 22:57:42"
-    assert out["atmos"] == 1022  # 0xFFFE - 0xFC00
-    assert _by(out, 1, 0) == 82.7  # indoor 0x06BF
-    assert _by(out, 2, 0) == 72
-    assert _by(out, 1, 1) == 85.2  # outdoor 0x06D8
-    assert _by(out, 2, 1) == 47
 
 
 def test_temp_formula():

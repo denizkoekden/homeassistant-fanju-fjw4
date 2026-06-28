@@ -19,14 +19,14 @@ Body::
     [lead byte = 00]
     3-byte triplets [temp16_LE, hum8] ... grouped 3-per-channel (cur, high, low),
     channel 0 = indoor, channel 1 = outdoor; absent channels are 0xFF-filled.
-    After the channel slots, a 16-bit little-endian pressure field.
 
-Encodings (confirmed): temperature degF = raw / 10 - 90; humidity = raw byte;
-pressure hPa = 0xFFFE - raw (the firmware stores it inverted).
+Encodings (confirmed): temperature degF = raw / 10 - 90; humidity = raw byte.
 
-The parsed result is shaped to match the cloud ``getRealtime`` payload
-(``sensorDatas`` + ``atmos``) so the sensor platform consumes both paths
-unchanged.
+The station does NOT transmit barometric pressure over this UDP link - only
+temperature and humidity. (The vendor cloud fills its own pressure field from a
+weather service keyed on the station's GPS location, not from the sensor - so it
+isn't recoverable locally.) The parsed result is shaped to match the cloud
+``getRealtime`` payload (``sensorDatas``).
 """
 
 from __future__ import annotations
@@ -51,11 +51,6 @@ _INVALID_HUM = 0xFF
 # Channel index -> cloud channel number, in the order triplets appear in the body.
 _CHANNEL_ORDER = (CHANNEL_INDOOR, CHANNEL_OUTDOOR)
 
-# Pressure: 16-bit little-endian field after the four channel slots in the body
-# (8 timestamp + 1 lead + 4 channels * 3 triplets * 3 bytes). Stored inverted.
-_PRESSURE_OFFSET = 45
-_PRESSURE_BASE = 0xFFFE  # hPa = base - value
-
 
 def _temp_f(raw: int) -> float:
     """Convert a raw 16-bit temperature to degrees Fahrenheit."""
@@ -69,9 +64,9 @@ def parse_upload(payload: bytes) -> dict[str, Any] | None:
         payload: The raw UDP payload (including the device prefix).
 
     Returns:
-        A dict with ``sensorDatas`` (and ``atmos`` when available) mirroring the
-        cloud ``getRealtime`` content, plus ``device`` and ``timestamp`` extras;
-        or ``None`` if the payload is not a recognizable 53:30 upload.
+        A dict with ``sensorDatas`` mirroring the cloud ``getRealtime`` content,
+        plus ``device``, ``mac`` and ``timestamp`` extras; or ``None`` if the
+        payload is not a recognizable 53:30 upload.
     """
     marker = payload.find(UPLOAD_MARKER)
     if marker < 0:
@@ -127,24 +122,9 @@ def parse_upload(payload: bytes) -> dict[str, Any] | None:
                 {"type": SENSOR_TYPE_HUMIDITY, "channel": channel, "curVal": hum}
             )
 
-    # Barometric pressure: a 16-bit little-endian field right after the four
-    # 3-triplet channel slots (offset 8 timestamp + 1 lead + 4*3*3 = 45). The
-    # firmware stores it inverted: hPa = 0xFFFE - value. Confirmed against the
-    # cloud at 1020 hPa (0xFC02) and 1022 hPa (0xFC00).
-    atmos: int | None = None
-    if len(body) >= _PRESSURE_OFFSET + 2:
-        raw_pressure = int.from_bytes(
-            body[_PRESSURE_OFFSET : _PRESSURE_OFFSET + 2], "little"
-        )
-        if raw_pressure != 0xFFFF:
-            candidate = _PRESSURE_BASE - raw_pressure
-            if 800 <= candidate <= 1100:  # sanity-bound to plausible sea-level hPa
-                atmos = candidate
-
     return {
         "device": device_prefix,
         "mac": mac,
         "timestamp": timestamp,
         "sensorDatas": sensor_datas,
-        "atmos": atmos,
     }

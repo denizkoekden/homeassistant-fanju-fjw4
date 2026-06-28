@@ -77,8 +77,7 @@
       "indoor_temperature": { "name": "Indoor temperature" },
       "indoor_humidity": { "name": "Indoor humidity" },
       "outdoor_temperature": { "name": "Outdoor temperature" },
-      "outdoor_humidity": { "name": "Outdoor humidity" },
-      "pressure": { "name": "Pressure" }
+      "outdoor_humidity": { "name": "Outdoor humidity" }
     }
   }
 }

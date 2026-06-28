@@ -12,7 +12,7 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.const import PERCENTAGE, UnitOfPressure, UnitOfTemperature
+from homeassistant.const import PERCENTAGE, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
@@ -101,18 +101,6 @@ SENSOR_DESCRIPTIONS: tuple[FanjuSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: _reading(
             data, SENSOR_TYPE_HUMIDITY, CHANNEL_OUTDOOR, (_INVALID_HUMIDITY,)
-        ),
-    ),
-    FanjuSensorEntityDescription(
-        key="pressure",
-        translation_key="pressure",
-        device_class=SensorDeviceClass.ATMOSPHERIC_PRESSURE,
-        native_unit_of_measurement=UnitOfPressure.HPA,
-        state_class=SensorStateClass.MEASUREMENT,
-        # Device reports whole hPa; avoid a misleading "1020.00 hPa".
-        suggested_display_precision=0,
-        value_fn=lambda data: (
-            float(data["atmos"]) if data.get("atmos") is not None else None
         ),
     ),
 )

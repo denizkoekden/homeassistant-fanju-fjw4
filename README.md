@@ -6,7 +6,7 @@ shows up under a few other brand names with the same EMaxLife cloud behind it).
 
 I started from the [homebridge-fanju-fjw4](https://github.com/slavvka/homebridge-fanju-fjw4)
 plugin and rebuilt it as a native Home Assistant integration. It exposes the
-indoor and outdoor temperature and humidity plus the barometer.
+indoor and outdoor temperature and humidity.
 
 There are two ways to run it: through the cloud, or directly on your LAN.
 
@@ -50,9 +50,12 @@ and the integration only re-checks every five minutes. Once data is flowing the
 station reports about once a minute. That interval is fixed by the station's main
 board, not the Wi-Fi module, so there's no setting to make it report faster.
 
-Temperature, humidity and pressure are all read straight out of the packets. The
-pressure encoding is a little odd — the firmware stores it inverted — but it
-lines up with the cloud, so you get the full set of readings without an account.
+A note on pressure: the station doesn't actually transmit a barometer reading
+over the wire — only temperature and humidity go out. The pressure you see in the
+WeatherSense app is the vendor cloud filling in a weather-service value for the
+station's GPS location, not the device's own sensor, so there's no pressure
+entity (in either mode). If you want local pressure, a regular Home Assistant
+weather integration does the same thing, more honestly.
 
 ## Sensors
 
@@ -62,7 +65,6 @@ lines up with the cloud, so you get the full set of readings without an account.
 | Indoor humidity | main station |
 | Outdoor temperature | wireless 433 MHz sensor |
 | Outdoor humidity | wireless 433 MHz sensor |
-| Pressure | barometer |
 
 Temperatures arrive in Fahrenheit and Home Assistant converts them to whatever
 your system uses. Each entity can sit in its own area, so the outdoor sensors can

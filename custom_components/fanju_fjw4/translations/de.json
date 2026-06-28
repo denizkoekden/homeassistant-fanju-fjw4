@@ -77,8 +77,7 @@
       "indoor_temperature": { "name": "Innentemperatur" },
       "indoor_humidity": { "name": "Luftfeuchtigkeit innen" },
       "outdoor_temperature": { "name": "Außentemperatur" },
-      "outdoor_humidity": { "name": "Luftfeuchtigkeit außen" },
-      "pressure": { "name": "Luftdruck" }
+      "outdoor_humidity": { "name": "Luftfeuchtigkeit außen" }
     }
   }
 }
