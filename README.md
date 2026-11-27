@@ -16,10 +16,6 @@ The easy one. Give it the same email and password you use in the WeatherSense
 app and it polls the EMaxLife cloud the app talks to. Default poll is every 10
 minutes; change it under **Configure** (60s minimum).
 
-One thing worth knowing: the vendor's TLS certificate has been expired for ages.
-The integration skips verification for that single host, exactly like the app
-does. Nothing else on your machine is affected.
-
 ## Local (no cloud)
 
 I didn't love that a thermometer on my balcony had to round-trip through a server

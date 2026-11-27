@@ -124,12 +124,8 @@ class FanjuDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             config_entry=entry,
             update_interval=timedelta(seconds=scan_interval),
         )
-        # The vendor cloud (app.emaxlife.net) regularly serves an expired TLS
-        # certificate, so we must skip certificate verification - the official
-        # WeatherSense app does the same. verify_ssl=False returns a separate
-        # shared session, so other integrations keep verifying normally.
         self.api = WeatherSenseApi(
-            async_get_clientsession(hass, verify_ssl=False),
+            async_get_clientsession(hass),
             entry.data[CONF_USERNAME],
             entry.data[CONF_PASSWORD],
         )
